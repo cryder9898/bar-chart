@@ -1,9 +1,12 @@
 const dataURL = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json";
 
 // Set the dimensions of the canvas / graph
+const w = 300,
+h = 200;
+
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
+    width = w - margin.left - margin.right,
+    height = h - margin.top - margin.bottom;
 
 // Parse the date / time
 var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -26,19 +29,22 @@ var valueline = d3.svg.line()
 
 // Adds the svg canvas
 var svg = d3.select("body")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
+  .append("svg")
+    .attr("xmlns", "http://www.w3.org/2000/svg")
+    .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+    // responsiveness for mobile
+    .attr("viewbox", "0 0 " + w + " " + h)
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
 
 // Get the data
 d3.json(dataURL, function(error, data) {
     data = data.data.map(function(d) {
         let obj = {};
         obj.date = parseDate(d[0]);
-        //console.log(parseDate(d[0]));
         obj.gdp = +d[1];
         return obj;
     });
