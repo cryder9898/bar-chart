@@ -4,7 +4,7 @@ const dataURL = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReference
 const w = 600,
 h = 300;
 
-var margin = {top: 30, right: 20, bottom: 30, left: 50},
+var margin = {top: 30, right: 20, bottom: 40, left: 60},
     width = w - margin.left - margin.right,
     height = h - margin.top - margin.bottom;
 
@@ -17,13 +17,17 @@ var y = d3.scaleLinear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.axisBottom(x).ticks(10);
-
 var yAxis = d3.axisLeft(y).ticks(10);
 
 // Define the line
 var valueline = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.gdp); });
+
+d3.select("svg")
+  .on("mouseover", function() {
+    console.log()
+  });
 
 // Adds the svg canvas
 var svg = d3.select("svg")
@@ -49,11 +53,25 @@ d3.json(dataURL, function(error, data) {
         .attr("class", "line")
         .attr("d", valueline(data));
 
+    svg.append("text")      // text label for the x axis
+        .attr("x", width/2 )
+        .attr("y",  height + margin.bottom )
+        .style("text-anchor", "middle")
+        .text("Year");
+
     // Add the X Axis
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
+
+    svg.append("text")      // text label for the y axis
+        .attr("transform", "rotate(-90)")
+        .attr("y",  0 - margin.left )
+        .attr("x", 0 - (height/2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Gross Domestic Product");
 
     // Add the Y Axis
     svg.append("g")
